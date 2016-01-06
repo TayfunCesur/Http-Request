@@ -1,4 +1,16 @@
-HttpRequest
+
+Simple useage
+
+    HttpRequestFactory factory = new HttpRequestFactory(getApplicationContext()) {
+            @Override
+            public void Happens(RIO rio) {
+                //you will have the response data in rio object
+            }
+        };
+
+        factory.createRequest(RequestType.GET,"https://httpbin.org/get")
+                .secure(true)
+                .execute();
 
 
 
