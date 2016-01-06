@@ -2,7 +2,7 @@
 Simple usage
 =============
 ## HTTP GET
-    HttpRequestFactory factory = new HttpRequestFactory(getApplicationContext()) {
+        HttpRequestFactory factory = new HttpRequestFactory(getApplicationContext()) {
             @Override
             public void Happens(RIO rio) {
                 //you will have the response data in rio object
@@ -14,17 +14,18 @@ Simple usage
                 .execute();
                
 ## HTTP POST
-    HttpRequestFactory factory = new HttpRequestFactory(getApplicationContext()) {
-                @Override
-                public void Happens(RIO rio) {
-                    
-                }
-            };
-    
-            factory.createRequest(RequestType.POST,"https://httpbin.org/post")
-                    .secure(true)
-                    .setBody("{\"test\":\"object\"}")
-                    .execute();
+        HttpRequestFactory factory = new HttpRequestFactory(getApplicationContext()) {
+            @Override
+            public void Happens(RIO rio) {
+                int a = 0;
+            }
+        };
+
+        factory.createRequest(RequestType.POST,"https://httpbin.org/post")
+                .secure(true)
+                .addHeaderValue("Content-type","application/json")
+                .setBody("{\"test\":\"object\"}")
+                .execute();
                 
 RIO Details
 ===========
