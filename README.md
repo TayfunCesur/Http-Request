@@ -1,7 +1,7 @@
 
 Simple usage
 =============
-
+## HTTP GET
     HttpRequestFactory factory = new HttpRequestFactory(getApplicationContext()) {
             @Override
             public void Happens(RIO rio) {
@@ -12,8 +12,31 @@ Simple usage
         factory.createRequest(RequestType.GET,"https://httpbin.org/get")
                 .secure(true)
                 .execute();
+               
+## HTTP POST
+    HttpRequestFactory factory = new HttpRequestFactory(getApplicationContext()) {
+                @Override
+                public void Happens(RIO rio) {
+                    
+                }
+            };
+    
+            factory.createRequest(RequestType.POST,"https://httpbin.org/post")
+                    .secure(true)
+                    .setBody("{\"test\":\"object\"}")
+                    .execute();
+                
+RIO Details
+===========
+RIO is the response identifier object which carries the data related to response and exceptions.
 
 
+- result , represents the request code; eg 200 HTTP_OK, 404 HTTP_NOT_FOUND etc
+- response_json , JSON serialized version of response text, equals to null if there is an exception
+- response_str, response text
+- exceptions, the list of exceptions along the response comes through, null if there is no exception.
+- responseUrl
+- request, Request object that performs the http request
 
 
 

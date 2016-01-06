@@ -85,8 +85,9 @@ public abstract class Request{
         return _body;
     }
 
-    public void setBody(String body){
+    public Request setBody(String body){
         _body = body;
+        return this;
     }
 
     public RequestType getRequestType(){

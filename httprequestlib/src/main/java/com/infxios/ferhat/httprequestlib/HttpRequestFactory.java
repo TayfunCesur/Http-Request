@@ -283,9 +283,9 @@ public abstract class HttpRequestFactory {
 
                         try {
                             JSONObject object = new JSONObject(bdeger);
-                            rio.response = object;
+                            rio.response_json = object;
                         } catch (JSONException e) {
-                            rio.response = null;
+                            rio.response_json = null;
                             rio.exceptions = rio.exceptions == null ? new ArrayList<Exception>() : rio.exceptions;
                             rio.exceptions.add(e);
                         }
@@ -314,7 +314,7 @@ public abstract class HttpRequestFactory {
 
                 @Override
                 protected void onPostExecute(Object o) {
-                    Looper.prepare();
+
                     _requestFactory.Happens((RIO)o);
                     super.onPostExecute(o);
                 }
@@ -412,9 +412,9 @@ public abstract class HttpRequestFactory {
 
                         try {
                             JSONObject jo = new JSONObject(sdeger);
-                            rio.response = jo;
+                            rio.response_json = jo;
                         } catch (JSONException e) {
-                            rio.response = null;
+                            rio.response_json = null;
                             rio.exceptions = rio.exceptions == null ? new ArrayList<Exception>() : rio.exceptions;
                             rio.exceptions.add(e);
                             e.printStackTrace();

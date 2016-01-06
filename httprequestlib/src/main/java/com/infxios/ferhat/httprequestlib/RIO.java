@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class RIO {
     public HttpResponseType result = HttpResponseType.HTTP_FORBIDDEN;
-    public JSONObject response = null;
+    public JSONObject response_json = null;
     public String response_str = null;
     public List<Exception> exceptions = null;
     public String responseUrl = null;
