@@ -45,7 +45,7 @@ public abstract class Request{
         execute();
     }
 
-    public Request Secure(boolean isSecure){
+    public Request secure(boolean isSecure){
         _isSecure = isSecure;
         return this;
     }
