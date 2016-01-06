@@ -1,5 +1,5 @@
 
-Simple useage
+Simple usage
 =============
 
     HttpRequestFactory factory = new HttpRequestFactory(getApplicationContext()) {
