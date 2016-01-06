@@ -185,7 +185,7 @@
       file or class name and description of purpose be included on the
       same "printed page" as the copyright notice for easier
       identification within third-party archives.
-
+[yyyy] [name of copyright owner]
    Copyright 2016 Ferhat Dündar
 
    Licensed under the Apache License, Version 2.0 (the "License");
