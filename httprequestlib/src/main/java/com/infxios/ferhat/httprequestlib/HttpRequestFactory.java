@@ -22,6 +22,7 @@ import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Properties;
 
 
@@ -105,7 +106,81 @@ public abstract class HttpRequestFactory {
     protected Context context = null;
 
     private static HttpResponseType getResult(int result){
-        return HttpResponseType.HTTP_OK;
+
+        switch (result){
+            case 202:
+                return HttpResponseType.HTTP_ACCEPTED;
+            case 502:
+                return HttpResponseType.HTTP_BAD_GATEWAY;
+            case 405:
+                return HttpResponseType.HTTP_BAD_METHOD;
+            case 400:
+                return HttpResponseType.HTTP_BAD_REQUEST;
+            case 408:
+                return HttpResponseType.HTTP_CLIENT_TIMEOUT;
+            case 409:
+                return HttpResponseType.HTTP_CONFLICT;
+            case 201:
+                return HttpResponseType.HTTP_CREATED;
+            case 413:
+                return HttpResponseType.HTTP_ENTITY_TOO_LARGE;
+            case 403:
+                return HttpResponseType.HTTP_FORBIDDEN;
+            case 504:
+                return HttpResponseType.HTTP_GATEWAY_TIMEOUT;
+            case 410:
+                return  HttpResponseType.HTTP_GONE;
+            case 500:
+                return HttpResponseType.HTTP_INTERNAL_ERROR;
+            case 411:
+                return HttpResponseType.HTTP_LENGTH_REQUIRED;
+            case 301:
+                return HttpResponseType.HTTP_MOVED_PERM;
+            case 302:
+                return HttpResponseType.HTTP_MOVED_TEMP;
+            case 300:
+                return HttpResponseType.HTTP_MULT_CHOICE;
+            case 406:
+                return HttpResponseType.HTTP_NOT_ACCEPTABLE;
+            case 203:
+                return HttpResponseType.HTTP_NOT_AUTHORITATIVE;
+            case 404:
+                return HttpResponseType.HTTP_NOT_FOUND;
+            case 501:
+                return HttpResponseType.HTTP_NOT_IMPLEMENTED;
+            case 304:
+                return HttpResponseType.HTTP_NOT_MODIFIED;
+            case 204:
+                return HttpResponseType.HTTP_NO_CONTEN;
+            case 200:
+                return HttpResponseType.HTTP_OK;
+            case 206:
+                return HttpResponseType.HTTP_PARTIAL;
+            case 402:
+                return HttpResponseType.HTTP_PAYMENT_REQUIRED;
+            case 412:
+                return HttpResponseType.HTTP_PRECON_FAILED;
+            case 407:
+                return HttpResponseType.HTTP_PROXY_AUTH;
+            case 414:
+                return HttpResponseType.HTTP_REQ_TOO_LONG;
+            case 205:
+                return HttpResponseType.HTTP_RESET;
+            case 303:
+                return HttpResponseType.HTTP_SEE_OTHER;
+            case 401:
+                return HttpResponseType.HTTP_UNAUTHORIZED;
+            case 503:
+                return HttpResponseType.HTTP_UNAVAILABLE;
+            case 415:
+                return HttpResponseType.HTTP_UNSUPPORTED_TYPE;
+            case 305:
+                return HttpResponseType.HTTP_USE_PROXY;
+            case 505:
+                return HttpResponseType.HTTP_VERSION;
+            default:
+                return HttpResponseType.HTTP_FORBIDDEN;
+        }
     }
 
     private final class PostRequest extends Request{
@@ -124,7 +199,7 @@ public abstract class HttpRequestFactory {
                 @Override
                 protected Object doInBackground(Object[] params) {
                     _isBusy = true;
-                    RIO rio = null;
+                    RIO rio = new RIO();
                     try {
                         URL url = new URL(_url);
 
@@ -156,7 +231,6 @@ public abstract class HttpRequestFactory {
                                 opwriter.write(_body);
                             }
 
-                            rio = new RIO();
                             rio.result = HttpRequestFactory.getResult(connection.getResponseCode());
                             rio.responseUrl = _url;
                             rio.request = PostRequest.this;
@@ -186,7 +260,6 @@ public abstract class HttpRequestFactory {
                                 opwriter.write(_body);
                             }
 
-                            rio = new RIO();
                             rio.result = HttpRequestFactory.getResult(connection.getResponseCode());
                             rio.responseUrl = _url;
 
@@ -213,7 +286,8 @@ public abstract class HttpRequestFactory {
                             rio.response = object;
                         } catch (JSONException e) {
                             rio.response = null;
-                            rio.exception += e.toString();
+                            rio.exceptions = rio.exceptions == null ? new ArrayList<Exception>() : rio.exceptions;
+                            rio.exceptions.add(e);
                         }
 
 
@@ -221,14 +295,14 @@ public abstract class HttpRequestFactory {
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
                         e.printStackTrace();
-                        rio = rio == null ? new RIO() : rio;
-                        rio.exception += e.toString();
+                        rio.exceptions = rio.exceptions == null ? new ArrayList<Exception>() : rio.exceptions;
+                        rio.exceptions.add(e);
                         rio.result = HttpResponseType.HTTP_FORBIDDEN;
                         rio.responseUrl = _url;
                     } catch (IOException e) {
                         e.printStackTrace();
-                        rio = rio == null ? new RIO() : rio;
-                        rio.exception += e.toString();
+                        rio.exceptions = rio.exceptions == null ? new ArrayList<Exception>() : rio.exceptions;
+                        rio.exceptions.add(e);
                         rio.result = HttpResponseType.HTTP_FORBIDDEN;
                         rio.responseUrl = _url;
                     }
@@ -341,18 +415,21 @@ public abstract class HttpRequestFactory {
                             rio.response = jo;
                         } catch (JSONException e) {
                             rio.response = null;
-                            rio.exception += e.toString();
+                            rio.exceptions = rio.exceptions == null ? new ArrayList<Exception>() : rio.exceptions;
+                            rio.exceptions.add(e);
                             e.printStackTrace();
                         }
 
                     } catch (MalformedURLException e) {
                         rio.responseUrl = _url;
-                        rio.exception += e.toString();
+                        rio.exceptions = rio.exceptions == null ? new ArrayList<Exception>() : rio.exceptions;
+                        rio.exceptions.add(e);
                         rio.result = HttpResponseType.HTTP_FORBIDDEN;
                         e.printStackTrace();
                     } catch (IOException e) {
                         rio.responseUrl = _url;
-                        rio.exception += e.toString();
+                        rio.exceptions = rio.exceptions == null ? new ArrayList<Exception>() : rio.exceptions;
+                        rio.exceptions.add(e);
                         rio.result = HttpResponseType.HTTP_FORBIDDEN;
                         e.printStackTrace();
                     }
@@ -373,7 +450,6 @@ public abstract class HttpRequestFactory {
             super.execute();
         }
     }
-
 
 
     public Request createRequest(RequestType type, String url){
